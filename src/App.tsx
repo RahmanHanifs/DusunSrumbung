@@ -1,4 +1,3 @@
-import React from 'react';
 import { MapPin, Users, Building, Phone, Mail, Clock, Star, Camera, TreePine, Factory, School, Heart } from 'lucide-react';
 
 function App() {
