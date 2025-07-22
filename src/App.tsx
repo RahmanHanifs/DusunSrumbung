@@ -1,6 +1,97 @@
-import { MapPin, Users, Building, Phone, Mail, Clock, Star, Camera, TreePine, Factory, School, Heart } from 'lucide-react';
+import React, { useState } from 'react';
+import { MapPin, Users, Building, Phone, Mail, Clock, Star, Camera, TreePine, Factory, School, Heart, X, ExternalLink } from 'lucide-react';
+import MapDusun from './MapDusun';
+interface Location {
+  id: number;
+  name: string;
+  type: string;
+  address: string;
+  description: string;
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
+  icon: React.ReactNode;
+  color: string;
+}
 
 function App() {
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const locations: Location[] = [
+    {
+      id: 1,
+      name: "Rumah Kepala Dusun",
+      type: "Pemerintahan",
+      address: "Jl. Raya Dusun Srumbung No. 123",
+      description: "Rumah Kepala Dusun Srumbung",
+      coordinates: { lat: -7.204972, lng: 110.414694 },
+      icon: <Building className="w-5 h-5" />,
+      color: "bg-blue-600"
+    },
+    {
+      id: 2,
+      name: "Puskesmas Srumbung",
+      type: "Kesehatan",
+      address: "Jl. Kesehatan No. 45",
+      description: "Fasilitas kesehatan utama yang melayani masyarakat Dusun Srumbung dan sekitarnya.",
+      coordinates: { lat: -7.5693, lng: 110.8290 },
+      icon: <Heart className="w-5 h-5" />,
+      color: "bg-red-600"
+    },
+    {
+      id: 3,
+      name: "TKRA NURUL FALAH Srumbung",
+      type: "Pendidikan",
+      address: "Jl. Pendidikan No. 12",
+      description: "Pendidikan TK Dusun Srumbung",
+      coordinates: { lat: -7.5673, lng: 110.8270 },
+      icon: <School className="w-5 h-5" />,
+      color: "bg-green-600"
+    },
+    {
+      id: 4,
+      name: "Hutan Pinus",
+      type: "Wisata",
+      address: "Dusun Srumbung Utara",
+      description: "Destinasi wisata alam dengan hutan pinus yang asri dan jalur hiking yang menantang.",
+      coordinates: { lat: -7.5653, lng: 110.8250 },
+      icon: <TreePine className="w-5 h-5" />,
+      color: "bg-green-700"
+    },
+    {
+      id: 5,
+      name: "Air Terjun Pelangi",
+      type: "Wisata",
+      address: "Dusun Srumbung Selatan",
+      description: "Air terjun indah setinggi 25 meter dengan pemandangan pelangi yang menakjubkan.",
+      coordinates: { lat: -7.5713, lng: 110.8310 },
+      icon: <Camera className="w-5 h-5" />,
+      color: "bg-blue-700"
+    },
+    {
+      id: 6,
+      name: "Pasar Dusun",
+      type: "Ekonomi",
+      address: "Jl. Pasar No. 8",
+      description: "Pusat perdagangan Dusun dengan berbagai produk lokal dan kebutuhan sehari-hari.",
+      coordinates: { lat: -7.5688, lng: 110.8285 },
+      icon: <Factory className="w-5 h-5" />,
+      color: "bg-orange-600"
+    }
+  ];
+
+  const handleLocationClick = (location: Location) => {
+    setSelectedLocation(location);
+    setShowPopup(true);
+  };
+
+  const handleDirectionsClick = (location: Location) => {
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${location.coordinates.lat},${location.coordinates.lng}`;
+    window.open(googleMapsUrl, '_blank');
+  };
+
   return (
     <div className="min-h-screen bg-white">
       {/* Header */}
@@ -16,6 +107,7 @@ function App() {
               <a href="#about" className="text-gray-600 hover:text-green-600 transition-colors">Tentang</a>
               <a href="#demographics" className="text-gray-600 hover:text-green-600 transition-colors">Demografi</a>
               <a href="#tourism" className="text-gray-600 hover:text-green-600 transition-colors">Wisata</a>
+              <a href="#location" className="text-gray-600 hover:text-green-600 transition-colors">Lokasi</a>
               <a href="#contact" className="text-gray-600 hover:text-green-600 transition-colors">Kontak</a>
             </nav>
           </div>
@@ -32,11 +124,11 @@ function App() {
               <span className="text-green-600 block mt-2">Dusun Srumbung</span>
             </h2>
             <p className="text-xl md:text-2xl text-gray-600 mb-8 leading-relaxed">
-              Desa yang asri dengan pemandangan pegunungan yang indah, masyarakat yang ramah, dan potensi wisata yang luar biasa
+              Dusun yang asri dengan pemandangan pegunungan yang indah, masyarakat yang ramah, dan potensi wisata yang luar biasa
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button className="bg-green-600 text-white px-8 py-4 rounded-lg text-lg font-semibold hover:bg-green-700 transition-colors shadow-lg hover:shadow-xl transform hover:-translate-y-1">
-                Jelajahi Desa
+                Jelajahi Dusun
               </button>
               <button className="border-2 border-green-600 text-green-600 px-8 py-4 rounded-lg text-lg font-semibold hover:bg-green-600 hover:text-white transition-colors">
                 Pelajari Lebih Lanjut
@@ -53,7 +145,7 @@ function App() {
             <div className="text-center mb-16">
               <h3 className="text-4xl font-bold text-gray-800 mb-4">Tentang Dusun Srumbung</h3>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Dusun Srumbung adalah sebuah desa yang terletak di kaki pegunungan dengan luas wilayah 15 km² dan memiliki sejarah panjang sejak tahun 1850.
+                Dusun Srumbung adalah sebuah Dusun yang terletak di kaki pegunungan dengan luas wilayah 15 km² dan memiliki sejarah panjang sejak tahun 1850.
               </p>
             </div>
 
@@ -62,10 +154,10 @@ function App() {
                 <h4 className="text-2xl font-bold text-gray-800 mb-6">Sejarah & Visi</h4>
                 <div className="space-y-4 text-gray-600">
                   <p>
-                    Dusun Srumbung didirikan pada tahun 1850 oleh sekelompok pendatang yang mencari kehidupan yang lebih baik. Nama "Makmur" dipilih sebagai harapan agar desa ini dapat berkembang dan memberikan kesejahteraan bagi semua warganya.
+                    Dusun Srumbung didirikan pada tahun 1850 oleh sekelompok pendatang yang mencari kehidupan yang lebih baik. Nama "Makmur" dipilih sebagai harapan agar Dusun ini dapat berkembang dan memberikan kesejahteraan bagi semua warganya.
                   </p>
                   <p>
-                    Dengan visi menjadi desa mandiri yang berkelanjutan, kami terus mengembangkan potensi lokal sambil melestarikan nilai-nilai tradisional dan lingkungan alam.
+                    Dengan visi menjadi Dusun mandiri yang berkelanjutan, kami terus mengembangkan potensi lokal sambil melestarikan nilai-nilai tradisional dan lingkungan alam.
                   </p>
                 </div>
 
@@ -123,7 +215,7 @@ function App() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h3 className="text-4xl font-bold text-gray-800 mb-4">Demografi Desa</h3>
+              <h3 className="text-4xl font-bold text-gray-800 mb-4">Demografi Dusun</h3>
               <p className="text-xl text-gray-600">Data statistik penduduk dan fasilitas di Dusun Srumbung</p>
             </div>
 
@@ -262,7 +354,7 @@ function App() {
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h3 className="text-4xl font-bold text-gray-800 mb-4">Pemerintahan Desa</h3>
+              <h3 className="text-4xl font-bold text-gray-800 mb-4">Pemerintahan Dusun</h3>
               <p className="text-xl text-gray-600">Struktur pemerintahan dan layanan yang tersedia</p>
             </div>
 
@@ -276,7 +368,7 @@ function App() {
                         <Users className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <h5 className="font-semibold text-gray-800">Kepala Desa</h5>
+                        <h5 className="font-semibold text-gray-800">Kepala Dusun</h5>
                         <p className="text-gray-600">Bapak Suharto, S.Sos</p>
                       </div>
                     </div>
@@ -286,7 +378,7 @@ function App() {
                         <Building className="w-6 h-6 text-white" />
                       </div>
                       <div>
-                        <h5 className="font-semibold text-gray-800">Sekretaris Desa</h5>
+                        <h5 className="font-semibold text-gray-800">Sekretaris Dusun</h5>
                         <p className="text-gray-600">Ibu Siti Aminah, S.AP</p>
                       </div>
                     </div>
@@ -334,8 +426,105 @@ function App() {
         </div>
       </section>
 
+      {/* Location Section */}
+      <section id="location" className="py-20 bg-white">
+        <div className="container mx-auto px-4">
+          <div className="max-w-6xl mx-auto">
+            <div className="text-center mb-16">
+              <h3 className="text-4xl font-bold text-gray-800 mb-4">Lokasi Penting</h3>
+              <p className="text-xl text-gray-600">Temukan lokasi-lokasi penting di Dusun Srumbung</p>
+            </div>
+            <div className="grid lg:grid-cols-2 gap-12">
+              {/* Map */}
+              <div>
+                <h4 className="text-2xl font-semibold text-gray-800 mb-6">Peta Dusun</h4>
+                <div className="bg-gray-100 p-6">
+                  <MapDusun />
+                </div>
+              </div>
+              {/* Location List */}
+              <div>
+                <h4 className="text-2xl font-semibold text-gray-800 mb-6">Daftar Lokasi</h4>
+                <div className="space-y-4">
+                  {locations.map((location) => (
+                    <div
+                      key={location.id}
+                      onClick={() => handleLocationClick(location)}
+                      className="flex items-center p-4 bg-gray-50 hover:bg-gray-100 rounded-lg cursor-pointer transition-all hover:shadow-md group"
+                    >
+                      <div className={`w-12 h-12 ${location.color} rounded-full flex items-center justify-center mr-4 text-white group-hover:scale-110 transition-transform`}>
+                        {location.icon}
+                      </div>
+                      <div className="flex-1">
+                        <h5 className="font-semibold text-gray-800 group-hover:text-green-600 transition-colors">{location.name}</h5>
+                        <p className="text-sm text-gray-600">{location.type}</p>
+                        <p className="text-xs text-gray-500">{location.address}</p>
+                      </div>
+                      <MapPin className="w-5 h-5 text-gray-400 group-hover:text-green-600 transition-colors" />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Location Popup */}
+      {showPopup && selectedLocation && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-md w-full overflow-hidden shadow-2xl">
+            <div className="relative">
+              <div className={`h-32 ${selectedLocation.color} flex items-center justify-center text-white`}>
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-2">
+                    {React.cloneElement(selectedLocation.icon as React.ReactElement)}
+                  </div>
+                  <h4 className="text-xl font-bold">{selectedLocation.name}</h4>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowPopup(false)}
+                className="absolute top-4 right-4 w-8 h-8 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="p-6">
+              <div className="mb-4">
+                <span className="inline-block px-3 py-1 bg-gray-100 text-gray-700 text-sm rounded-full mb-3">
+                  {selectedLocation.type}
+                </span>
+                <p className="text-gray-600 text-sm mb-2">
+                  <MapPin className="w-4 h-4 inline mr-1" />
+                  {selectedLocation.address}
+                </p>
+                <p className="text-gray-700">{selectedLocation.description}</p>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={() => handleDirectionsClick(selectedLocation)}
+                  className="flex-1 bg-green-600 text-white py-3 px-4 rounded-lg font-semibold hover:bg-green-700 transition-colors flex items-center justify-center"
+                >
+                  <ExternalLink className="w-4 h-4 mr-2" />
+                  Rute
+                </button>
+                <button
+                  onClick={() => setShowPopup(false)}
+                  className="px-6 py-3 border border-gray-300 text-gray-700 rounded-lg font-semibold hover:bg-gray-50 transition-colors"
+                >
+                  Tutup
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Contact Section */}
-      <section id="contact" className="py-20 bg-white">
+      <section id="contact" className="py-20 bg-gray-50">
         <div className="container mx-auto px-4">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
@@ -373,7 +562,7 @@ function App() {
                     </div>
                     <div>
                       <h5 className="font-semibold text-gray-800 mb-1">Email</h5>
-                      <p className="text-gray-600">info@desamakmur.id<br />pelayanan@desamakmur.id</p>
+                      <p className="text-gray-600">info@Dusunmakmur.id<br />pelayanan@Dusunmakmur.id</p>
                     </div>
                   </div>
 
@@ -389,7 +578,7 @@ function App() {
                 </div>
               </div>
 
-              <div className="bg-gradient-to-br from-green-50 to-blue-50 p-8 rounded-xl">
+              <div className="bg-white p-8 rounded-xl shadow-lg">
                 <h4 className="text-2xl font-semibold text-gray-800 mb-6">Kirim Pesan</h4>
                 <form className="space-y-4">
                   <div>
@@ -429,7 +618,7 @@ function App() {
                   <h5 className="text-2xl font-bold">Dusun Srumbung</h5>
                 </div>
                 <p className="text-gray-400 mb-4">
-                  Desa yang asri dengan masyarakat yang ramah dan potensi wisata yang luar biasa. Bersama kita membangun desa yang lebih maju dan sejahtera.
+                  Dusun yang asri dengan masyarakat yang ramah dan potensi wisata yang luar biasa. Bersama kita membangun Dusun yang lebih maju dan sejahtera.
                 </p>
               </div>
 
@@ -455,7 +644,9 @@ function App() {
             </div>
 
             <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-              <p>&copy; 2024 Dusun Srumbung. Semua hak dilindungi.</p>
+              <span className="xyz">
+                {new Date().getFullYear()}
+              </span>
             </div>
           </div>
         </div>
