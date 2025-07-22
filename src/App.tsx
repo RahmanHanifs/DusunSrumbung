@@ -701,7 +701,6 @@ const App: React.FC = () => {
                 </ul>
               </AnimatedSection>
             </div>
-
             <AnimatedSection className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
               <span className="xyz">
                 {new Date().getFullYear()}
